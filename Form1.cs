@@ -124,9 +124,27 @@ namespace C3PO_Converter
                 };
                 if (openFileDialog1.ShowDialog() == DialogResult.OK)
                 {
-                    C3POHandlerVersion5 c3PO_Handler = new C3POHandlerVersion5();
-                    c3PO_Handler = C3POHandlerVersion5.LoadJSON(openFileDialog.FileName);
-                    c3PO_Handler.Save(openFileDialog1.FileName);
+                    int Version = C3POVersionDetector.ReadJsonVersionID(openFileDialog.FileName);
+                    if (Version == 5)
+                    {
+                        C3POHandlerVersion5 c3PO_Handler = new C3POHandlerVersion5();
+                        c3PO_Handler = C3POHandlerVersion5.LoadJSON(openFileDialog.FileName);
+                        c3PO_Handler.Save(openFileDialog1.FileName);
+                    }
+                    else if (Version == 4)
+                    {
+                        C3POHandlerVersion4 c3PO_Handler = new C3POHandlerVersion4();
+                        c3PO_Handler = C3POHandlerVersion4.LoadJSON(openFileDialog.FileName);
+                        c3PO_Handler.Save(openFileDialog1.FileName);
+                    }
+                    else if (Version == 3)
+                    {
+
+                    }
+                    else
+                    {
+                        MessageBox.Show("Error Unknown Type Detected " + Version);
+                    }
                 }
             }
         }
@@ -151,9 +169,27 @@ namespace C3PO_Converter
 
                     for (int i = 0; i < NewFiles.Length; i++)
                     {
-                        C3POHandlerVersion5 c3PO_Handler = new C3POHandlerVersion5();
-                        c3PO_Handler = C3POHandlerVersion5.LoadJSON(NewFiles[i]);
-                        c3PO_Handler.Save(openFileDialog2.FileName + "\\" + Path.GetFileNameWithoutExtension(NewFiles[i]) + ".c3po");
+                        int Version = C3POVersionDetector.ReadJsonVersionID(NewFiles[i]);
+                        if (Version == 5)
+                        {
+                            C3POHandlerVersion5 c3PO_Handler = new C3POHandlerVersion5();
+                            c3PO_Handler = C3POHandlerVersion5.LoadJSON(NewFiles[i]);
+                            c3PO_Handler.Save(openFileDialog2.FileName + "\\" + Path.GetFileNameWithoutExtension(NewFiles[i]) + ".c3po");
+                        }
+                        else if (Version == 4)
+                        {
+                            C3POHandlerVersion4 c3PO_Handler = new C3POHandlerVersion4();
+                            c3PO_Handler = C3POHandlerVersion4.LoadJSON(NewFiles[i]);
+                            c3PO_Handler.Save(openFileDialog2.FileName + "\\" + Path.GetFileNameWithoutExtension(NewFiles[i]) + ".c3po");
+                        }
+                        else if (Version == 3)
+                        {
+
+                        }
+                        else
+                        {
+                            MessageBox.Show("Error Unknown Type Detected " + Version);
+                        }
                     }
 
                     MessageBox.Show("Folder Compiled");

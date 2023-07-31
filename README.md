@@ -6,6 +6,6 @@
 |----------------------------------------	|--------------	|--------------------	|
 | Star Wars - Jedi Starfighter (PS2)     	| 5            	| :heavy_check_mark: 	|
 | Star Wars - Jedi Starfighter (Xbox)    	| 5            	| :heavy_check_mark: 	|
-| Star Wars - Jedi Starfighter SE (Xbox) 	| 4            	| :x:                	|
-| Star Wars Starfighter (PC)             	| 4            	| :x:                	|
+| Star Wars - Jedi Starfighter SE (Xbox) 	| 4            	| :heavy_check_mark: 	|
+| Star Wars Starfighter (PC)             	| 4            	| :heavy_check_mark:  	|
 | Star Wars Starfighter (PS2)            	| 3            	| :x:                	|

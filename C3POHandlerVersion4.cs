@@ -93,6 +93,75 @@ namespace C3PO_Converter
             }
         }
 
+        public void Save(string path)
+        {
+            Stream stream = new MemoryStream();
+
+            StreamUtil.WriteNullString(stream, MagicHeader);
+            StreamUtil.WriteUInt8(stream, MagicByte);
+            StreamUtil.WriteUInt8(stream, VersionID);
+            stream.Position += 1;
+
+            StreamUtil.WriteUInt8(stream, U0);
+
+            if(U0==1)
+            {
+                var TempVar = Type1.Value;
+
+                StreamUtil.WriteNullString(stream, TempVar.ItemName);
+                StreamUtil.WriteNullString(stream, TempVar.ItemClass);
+                StreamUtil.WriteNullString(stream, TempVar.ItemModel);
+                StreamUtil.WriteUInt8(stream, TempVar.U1);
+                StreamUtil.WriteNullString(stream, TempVar.U2);
+
+                StreamUtil.WriteUInt8(stream, TempVar.Properties.Count);
+                for (int i = 0; i < TempVar.Properties.Count; i++)
+                {
+                    SaveData(stream, TempVar.Properties[i]);
+                }
+
+                StreamUtil.WriteUInt8(stream, TempVar.WeaponGroups.Count);
+                for (int i = 0; i < TempVar.WeaponGroups.Count; i++)
+                {
+                    StreamUtil.WriteNullString(stream, TempVar.WeaponGroups[i].GroupName);
+                    StreamUtil.WriteUInt8(stream, TempVar.WeaponGroups[i].Weapons.Count);
+                    for (int a = 0; a < TempVar.WeaponGroups[i].Weapons.Count; a++)
+                    {
+                        StreamUtil.WriteNullString(stream, TempVar.WeaponGroups[i].Weapons[a].WeaponName);
+                        StreamUtil.WriteNullString(stream, TempVar.WeaponGroups[i].Weapons[a].WeaponClass);
+                        StreamUtil.WriteNullString(stream, TempVar.WeaponGroups[i].Weapons[a].WeaponType);
+                    }
+                }
+                StreamUtil.WriteUInt8(stream, 0);
+            }
+            else if (U0==2)
+            {
+                var TempVar = Type2.Value;
+                StreamUtil.WriteNullString(stream, TempVar.ItemName);
+                StreamUtil.WriteNullString(stream, TempVar.ItemClass);
+                StreamUtil.WriteUInt8(stream, TempVar.Properties.Count);
+                for (int i = 0; i < TempVar.Properties.Count; i++)
+                {
+                    SaveData(stream, TempVar.Properties[i]);
+                }
+
+                StreamUtil.WriteUInt8(stream, TempVar.Properties1.Count);
+                for (int i = 0; i < TempVar.Properties1.Count; i++)
+                {
+                    SaveData(stream, TempVar.Properties1[i]);
+                }
+            }
+
+            if (File.Exists(path))
+            {
+                File.Delete(path);
+            }
+            var file = File.Create(path);
+            stream.Position = 0;
+            stream.CopyTo(file);
+            stream.Dispose();
+            file.Close();
+        }
 
         public void CreateJson(string path, bool Inline = false)
         {
@@ -172,6 +241,40 @@ namespace C3PO_Converter
             }
 
             return NewData;
+        }
+
+        public void SaveData(Stream stream, Data data)
+        {
+            StreamUtil.WriteNullString(stream, data.PropertyName);
+            StreamUtil.WriteUInt8(stream, data.Type);
+            if (data.Type == 1)
+            {
+                StreamUtil.WriteUInt8(stream, data.dataInt.Value.U0);
+                StreamUtil.WriteUInt8(stream, data.dataInt.Value.U1);
+                StreamUtil.WriteInt32(stream, data.dataInt.Value.Value);
+            }
+            else if (data.Type == 2)
+            {
+                StreamUtil.WriteUInt8(stream, data.dataFloat.Value.U0);
+                StreamUtil.WriteUInt8(stream, data.dataFloat.Value.U1);
+                StreamUtil.WriteFloat32(stream, data.dataFloat.Value.Value);
+            }
+            else if (data.Type == 3)
+            {
+                StreamUtil.WriteUInt8(stream, data.dataString.Value.U0);
+                StreamUtil.WriteUInt8(stream, data.dataString.Value.U1);
+                StreamUtil.WriteNullString(stream, data.dataString.Value.Value);
+            }
+            else if (data.Type == 4)
+            {
+                StreamUtil.WriteUInt8(stream, data.dataBool.Value.U0);
+                StreamUtil.WriteUInt8(stream, data.dataBool.Value.U1);
+                StreamUtil.WriteUInt8(stream, Convert.ToInt32(data.dataBool.Value.Value));
+            }
+            else
+            {
+                Debug.WriteLine("Error Unknown Type " + data.Type);
+            }
         }
 
         public struct Type1Struct
