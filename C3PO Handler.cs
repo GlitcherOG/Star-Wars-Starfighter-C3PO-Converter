@@ -15,6 +15,7 @@ namespace C3PO_Converter
     public class C3PO_Handler
     {
         public string MagicHeader;
+        public int MagicByte;
         public int VersionID;
         public string ItemName;
         public string ItemClass;
@@ -32,8 +33,9 @@ namespace C3PO_Converter
             using (Stream stream = File.Open(path, FileMode.Open))
             {
                 MagicHeader = StreamUtil.ReadNullEndString(stream);
-                VersionID = StreamUtil.ReadInt16(stream);
-                if (VersionID != 1306)
+                MagicByte = StreamUtil.ReadInt8(stream);
+                VersionID = StreamUtil.ReadInt8(stream);
+                if (VersionID != 5)
                 {
                     MessageBox.Show("Error Unknown Version " + VersionID + "\n Will Output Blank File");
                     return;
@@ -188,7 +190,8 @@ namespace C3PO_Converter
             Stream stream = new MemoryStream();
 
             StreamUtil.WriteNullString(stream, MagicHeader);
-            StreamUtil.WriteInt16(stream, VersionID);
+            StreamUtil.WriteUInt8(stream, MagicByte);
+            StreamUtil.WriteUInt8(stream, VersionID);
             stream.Position += 1;
 
             StreamUtil.WriteNullString(stream, ItemName);
