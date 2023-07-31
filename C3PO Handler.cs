@@ -35,7 +35,7 @@ namespace C3PO_Converter
                 VersionID = StreamUtil.ReadInt16(stream);
                 if (VersionID != 1306)
                 {
-                    Debug.WriteLine("Error Unknown Version " + VersionID);
+                    MessageBox.Show("Error Unknown Version " + VersionID + "\n Will Output Blank File");
                     return;
                 }
                 stream.Position += 1;
