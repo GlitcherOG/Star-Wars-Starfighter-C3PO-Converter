@@ -8,11 +8,10 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Shapes;
 using System.Xml;
-using static C3PO_Converter.C3PO_Handler;
 
 namespace C3PO_Converter
 {
-    public class C3PO_Handler
+    public class C3POHandlerVersion5
     {
         public string MagicHeader;
         public int MagicByte;
@@ -410,18 +409,18 @@ namespace C3PO_Converter
             File.WriteAllText(path, serializer);
         }
 
-        public static C3PO_Handler LoadJSON(string path)
+        public static C3POHandlerVersion5 LoadJSON(string path)
         {
             string paths = path;
             if (File.Exists(paths))
             {
                 var stream = File.ReadAllText(paths);
-                var container = JsonConvert.DeserializeObject<C3PO_Handler>(stream);
+                var container = JsonConvert.DeserializeObject<C3POHandlerVersion5>(stream);
                 return container;
             }
             else
             {
-                return new C3PO_Handler();
+                return new C3POHandlerVersion5();
             }
         }
 

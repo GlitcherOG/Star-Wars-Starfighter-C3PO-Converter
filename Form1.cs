@@ -26,9 +26,6 @@ namespace C3PO_Converter
             };
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
-                C3PO_Handler c3PO_Handler = new C3PO_Handler();
-                c3PO_Handler.Load(openFileDialog.FileName);
-
                 SaveFileDialog openFileDialog1 = new SaveFileDialog
                 {
                     Filter = "JSON File (*.json)|*.json|All files (*.*)|*.*",
@@ -37,7 +34,25 @@ namespace C3PO_Converter
                 };
                 if (openFileDialog1.ShowDialog() == DialogResult.OK)
                 {
-                    c3PO_Handler.CreateJson(openFileDialog1.FileName, true);
+                    int Version = C3POVersionDetector.ReadVersionID(openFileDialog.FileName);
+                    if (Version == 5)
+                    {
+                        C3POHandlerVersion5 c3PO_Handler = new C3POHandlerVersion5();
+                        c3PO_Handler.Load(openFileDialog.FileName);
+                        c3PO_Handler.CreateJson(openFileDialog1.FileName, true);
+                    }
+                    else if (Version == 4)
+                    {
+
+                    }
+                    else if (Version == 3)
+                    {
+
+                    }
+                    else
+                    {
+                        MessageBox.Show("Error Unknown Type Detected " + Version);
+                    }
                 }
             }
         }
@@ -54,7 +69,7 @@ namespace C3PO_Converter
                 CommonOpenFileDialog openFileDialog2 = new CommonOpenFileDialog
                 {
                     IsFolderPicker = true,
-                    Title = "Select C3PO Folder",
+                    Title = "Select Extraction Folder",
                 };
                 if (openFileDialog2.ShowDialog() == CommonFileDialogResult.Ok)
                 {
@@ -62,10 +77,28 @@ namespace C3PO_Converter
 
                     for (int i = 0; i < NewFiles.Length; i++)
                     {
-                        C3PO_Handler c3PO_Handler = new C3PO_Handler();
-                        c3PO_Handler.Load(NewFiles[i]);
+                        int Version = C3POVersionDetector.ReadVersionID(NewFiles[i]);
+                        if (Version == 5)
+                        {
+                            C3POHandlerVersion5 c3PO_Handler = new C3POHandlerVersion5();
+                            c3PO_Handler.Load(NewFiles[i]);
+                            c3PO_Handler.CreateJson(openFileDialog2.FileName + "\\" + Path.GetFileNameWithoutExtension(NewFiles[i]) + ".json", true);
+                        }
+                        else if (Version == 4)
+                        {
+                            C3POHandlerVersion4 c3POHandlerVersion4 = new C3POHandlerVersion4();
+                            c3POHandlerVersion4.Load(NewFiles[i]);
+                            c3POHandlerVersion4.CreateJson(openFileDialog2.FileName + "\\" + Path.GetFileNameWithoutExtension(NewFiles[i]) + ".json", true);
+                        }
+                        else if (Version == 3)
+                        {
 
-                        c3PO_Handler.CreateJson(openFileDialog2.FileName + "\\" + Path.GetFileNameWithoutExtension(NewFiles[i]) + ".json", true);
+                        }
+                        else
+                        {
+                            MessageBox.Show("Error Unknown Type Detected " + Version + "\n" + NewFiles[i]);
+                            break;
+                        }
                     }
 
                     MessageBox.Show("Folder Decompiled");
@@ -91,8 +124,8 @@ namespace C3PO_Converter
                 };
                 if (openFileDialog1.ShowDialog() == DialogResult.OK)
                 {
-                    C3PO_Handler c3PO_Handler = new C3PO_Handler();
-                    c3PO_Handler = C3PO_Handler.LoadJSON(openFileDialog.FileName);
+                    C3POHandlerVersion5 c3PO_Handler = new C3POHandlerVersion5();
+                    c3PO_Handler = C3POHandlerVersion5.LoadJSON(openFileDialog.FileName);
                     c3PO_Handler.Save(openFileDialog1.FileName);
                 }
             }
@@ -118,8 +151,8 @@ namespace C3PO_Converter
 
                     for (int i = 0; i < NewFiles.Length; i++)
                     {
-                        C3PO_Handler c3PO_Handler = new C3PO_Handler();
-                        c3PO_Handler = C3PO_Handler.LoadJSON(NewFiles[i]);
+                        C3POHandlerVersion5 c3PO_Handler = new C3POHandlerVersion5();
+                        c3PO_Handler = C3POHandlerVersion5.LoadJSON(NewFiles[i]);
                         c3PO_Handler.Save(openFileDialog2.FileName + "\\" + Path.GetFileNameWithoutExtension(NewFiles[i]) + ".c3po");
                     }
 
