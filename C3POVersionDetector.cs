@@ -31,6 +31,12 @@ namespace C3PO_Converter
             return JsonData.VersionID;
         }
 
+        public static string VerifyJSON(string path)
+        {
+
+
+        }
+
         public static C3POVersionDetector LoadJSON(string path)
         {
             string paths = path;
