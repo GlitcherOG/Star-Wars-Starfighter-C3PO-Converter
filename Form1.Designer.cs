@@ -87,7 +87,7 @@
             Controls.Add(button3);
             Controls.Add(button2);
             Controls.Add(button1);
-            FormBorderStyle = FormBorderStyle.FixedToolWindow;
+            FormBorderStyle = FormBorderStyle.FixedSingle;
             MaximizeBox = false;
             Name = "Form1";
             Text = "C3PO Decompiler by GlitcherOG";
