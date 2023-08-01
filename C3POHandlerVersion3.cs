@@ -1,14 +1,15 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
+using static C3PO_Converter.C3POHandlerVersion4;
 
 namespace C3PO_Converter
 {
-    public class C3POHandlerVersion4
+    public class C3POHandlerVersion3
     {
         public string MagicHeader;
         public int MagicByte;
@@ -17,6 +18,7 @@ namespace C3PO_Converter
 
         public Type1Struct? Type1;
         public Type2Struct? Type2;
+
         public void Load(string path)
         {
             using (Stream stream = File.Open(path, FileMode.Open))
@@ -104,7 +106,7 @@ namespace C3PO_Converter
 
             StreamUtil.WriteUInt8(stream, StructureType);
 
-            if(StructureType == 1)
+            if (StructureType == 1)
             {
                 var TempVar = Type1.Value;
 
@@ -132,7 +134,7 @@ namespace C3PO_Converter
                         StreamUtil.WriteNullString(stream, TempVar.WeaponGroups[i].Weapons[a].WeaponType);
                     }
                 }
-                StreamUtil.WriteUInt8(stream, 0);
+                //StreamUtil.WriteUInt8(stream, 0);
             }
             else if (StructureType == 2)
             {
@@ -162,39 +164,6 @@ namespace C3PO_Converter
             stream.Dispose();
             file.Close();
         }
-
-        public void CreateJson(string path, bool Inline = false)
-        {
-            var TempFormating = Newtonsoft.Json.Formatting.None;
-            if (Inline)
-            {
-                TempFormating = Newtonsoft.Json.Formatting.Indented;
-            }
-
-            var serializer = JsonConvert.SerializeObject(this, TempFormating, new JsonSerializerSettings
-            {
-                NullValueHandling = NullValueHandling.Ignore
-            });
-            File.WriteAllText(path, serializer);
-        }
-
-        public static C3POHandlerVersion4 LoadJSON(string path)
-        {
-            string paths = path;
-            if (File.Exists(paths))
-            {
-                var stream = File.ReadAllText(paths);
-                var container = JsonConvert.DeserializeObject<C3POHandlerVersion4>(stream);
-                return container;
-            }
-            else
-            {
-                return new C3POHandlerVersion4();
-            }
-        }
-
-
-
 
         public Data LoadData(Stream stream)
         {
@@ -277,6 +246,36 @@ namespace C3PO_Converter
             }
         }
 
+        public void CreateJson(string path, bool Inline = false)
+        {
+            var TempFormating = Newtonsoft.Json.Formatting.None;
+            if (Inline)
+            {
+                TempFormating = Newtonsoft.Json.Formatting.Indented;
+            }
+
+            var serializer = JsonConvert.SerializeObject(this, TempFormating, new JsonSerializerSettings
+            {
+                NullValueHandling = NullValueHandling.Ignore
+            });
+            File.WriteAllText(path, serializer);
+        }
+
+        public static C3POHandlerVersion3 LoadJSON(string path)
+        {
+            string paths = path;
+            if (File.Exists(paths))
+            {
+                var stream = File.ReadAllText(paths);
+                var container = JsonConvert.DeserializeObject<C3POHandlerVersion3>(stream);
+                return container;
+            }
+            else
+            {
+                return new C3POHandlerVersion3();
+            }
+        }
+
         public struct Type1Struct
         {
             public string ItemName;
@@ -303,7 +302,6 @@ namespace C3PO_Converter
             public int PropertiesCount1;
             public List<Data> Properties1;
         }
-
 
         public struct Data
         {
