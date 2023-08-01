@@ -34,7 +34,7 @@ namespace C3PO_Converter
         public static string VerifyJSON(string path)
         {
 
-
+            return "";
         }
 
         public static C3POVersionDetector LoadJSON(string path)
