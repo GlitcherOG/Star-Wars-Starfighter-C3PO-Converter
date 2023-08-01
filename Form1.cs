@@ -31,7 +31,7 @@ namespace C3PO_Converter
                     Filter = "JSON File (*.json)|*.json|All files (*.*)|*.*",
                     FilterIndex = 1,
                     RestoreDirectory = false
-                    
+
                 };
                 openFileDialog1.FileName = Path.GetFileNameWithoutExtension(openFileDialog.FileName);
                 if (openFileDialog1.ShowDialog() == DialogResult.OK)
