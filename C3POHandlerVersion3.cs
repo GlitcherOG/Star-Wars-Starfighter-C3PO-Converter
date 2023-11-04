@@ -11,8 +11,8 @@ namespace C3PO_Converter
 {
     public class C3POHandlerVersion3
     {
-        public string MagicHeader;
-        public int MagicByte;
+        public string MagicHeader = "LucasArts Class File";
+        public int MagicByte =26;
         public int VersionID;
         public int StructureType;
 
@@ -274,6 +274,194 @@ namespace C3PO_Converter
             {
                 return new C3POHandlerVersion3();
             }
+        }
+
+        public void CreateText(string path)
+        {
+            string n = "\n";
+            string tab = "\t";
+
+            string TextFile = MagicHeader + n;
+            TextFile += "Version " + VersionID + n + n;
+
+            if(StructureType==1)
+            {
+                TextFile += "Type 1" + n;
+                TextFile += "ItemName " + Type1.Value.ItemName + n;
+                TextFile += "ItemClass " + Type1.Value.ItemClass + n;
+                TextFile += "ItemModel " + Type1.Value.ItemModel + n;
+                TextFile += "U1 " + Type1.Value.U1 + n;
+                TextFile += "U2 " + Type1.Value.U2 + n;
+
+                if (Type1.Value.Properties.Count != 0)
+                {
+                    TextFile += n;
+
+                    TextFile += "Properties" + n;
+                    for (int i = 0; i < Type1.Value.Properties.Count; i++)
+                    {
+                        TextFile += tab + Type1.Value.Properties[i].PropertyName + " ";
+
+                        if (Type1.Value.Properties[i].Type == 1)
+                        {
+                            TextFile += Type1.Value.Properties[i].dataInt.Value.U0 + " " + Type1.Value.Properties[i].dataInt.Value.U1 + " " + Type1.Value.Properties[i].dataInt.Value.Value;
+                        }
+
+                        if (Type1.Value.Properties[i].Type == 2)
+                        {
+                            TextFile += Type1.Value.Properties[i].dataFloat.Value.U0 + " " + Type1.Value.Properties[i].dataFloat.Value.U1 + " " + Type1.Value.Properties[i].dataFloat.Value.Value + "f";
+                        }
+
+                        if (Type1.Value.Properties[i].Type == 3)
+                        {
+                            TextFile += Type1.Value.Properties[i].dataString.Value.U0 + " " + Type1.Value.Properties[i].dataString.Value.U1 + " " + QuoteThis(Type1.Value.Properties[i].dataString.Value.Value);
+                        }
+
+                        if (Type1.Value.Properties[i].Type == 4)
+                        {
+                            string textValue = "false";
+
+                            if (Type1.Value.Properties[i].dataBool.Value.Value)
+                            {
+                                textValue = "true";
+                            }
+
+                            TextFile += Type1.Value.Properties[i].dataBool.Value.U0 + " " + Type1.Value.Properties[i].dataBool.Value.U1 + " " + textValue;
+                        }
+
+                        TextFile += n;
+                    }
+                }
+
+                if (Type1.Value.WeaponGroups.Count != 0)
+                {
+                    TextFile += n;
+
+                    TextFile += "WeaponGroup" + n;
+                    for (int i = 0; i < Type1.Value.WeaponGroups.Count; i++)
+                    {
+                        TextFile += tab + Type1.Value.WeaponGroups[i].GroupName + n;
+
+                        for (int a = 0; a < Type1.Value.WeaponGroups[i].Weapons.Count; a++)
+                        {
+                            TextFile += tab + tab + Type1.Value.WeaponGroups[i].Weapons[a].WeaponName + " " + Type1.Value.WeaponGroups[i].Weapons[a].WeaponClass + " " + Type1.Value.WeaponGroups[i].Weapons[a].WeaponType + n;
+                        }
+                    }
+                }
+            }
+
+            if (StructureType == 2)
+            {
+                TextFile += "Type 2" + n;
+                TextFile += tab + "ItemName " + Type2.Value.ItemName + n;
+                TextFile += tab + "ItemClass " + Type2.Value.ItemClass + n;
+
+                if (Type2.Value.Properties.Count != 0)
+                {
+                    TextFile += n;
+
+                    TextFile += tab + "Properties" + n;
+                    for (int i = 0; i < Type2.Value.Properties.Count; i++)
+                    {
+                        TextFile += tab + tab + Type2.Value.Properties[i].PropertyName + " ";
+
+                        if (Type2.Value.Properties[i].Type == 1)
+                        {
+                            TextFile += Type2.Value.Properties[i].dataInt.Value.U0 + " " + Type2.Value.Properties[i].dataInt.Value.U1 + " " + Type2.Value.Properties[i].dataInt.Value.Value;
+                        }
+
+                        if (Type2.Value.Properties[i].Type == 2)
+                        {
+                            TextFile += Type2.Value.Properties[i].dataFloat.Value.U0 + " " + Type2.Value.Properties[i].dataFloat.Value.U1 + " " + Type2.Value.Properties[i].dataFloat.Value.Value + "f";
+                        }
+
+                        if (Type2.Value.Properties[i].Type == 3)
+                        {
+                            TextFile += Type2.Value.Properties[i].dataString.Value.U0 + " " + Type2.Value.Properties[i].dataString.Value.U1 + " " + QuoteThis(Type2.Value.Properties[i].dataString.Value.Value);
+                        }
+
+                        if (Type2.Value.Properties[i].Type == 4)
+                        {
+                            string textValue = "false";
+
+                            if (Type2.Value.Properties[i].dataBool.Value.Value)
+                            {
+                                textValue = "true";
+                            }
+
+                            TextFile += Type2.Value.Properties[i].dataBool.Value.U0 + " " + Type2.Value.Properties[i].dataBool.Value.U1 + " " + textValue;
+                        }
+
+                        TextFile += n;
+                    }
+                }
+
+                if (Type2.Value.Properties1.Count != 0)
+                {
+                    TextFile += n;
+                    TextFile += tab + "Properties1" + n;
+                    for (int i = 0; i < Type2.Value.Properties1.Count; i++)
+                    {
+                        TextFile += tab + tab + Type2.Value.Properties1[i].PropertyName + " ";
+
+                        if (Type2.Value.Properties1[i].Type == 1)
+                        {
+                            TextFile += Type2.Value.Properties1[i].dataInt.Value.U0 + " " + Type2.Value.Properties1[i].dataInt.Value.U1 + " " + Type2.Value.Properties1[i].dataInt.Value.Value;
+                        }
+
+                        if (Type2.Value.Properties1[i].Type == 2)
+                        {
+                            TextFile += Type2.Value.Properties1[i].dataFloat.Value.U0 + " " + Type2.Value.Properties1[i].dataFloat.Value.U1 + " " + Type2.Value.Properties1[i].dataFloat.Value.Value + "f";
+                        }
+
+                        if (Type2.Value.Properties1[i].Type == 3)
+                        {
+                            TextFile += Type2.Value.Properties1[i].dataString.Value.U0 + " " + Type2.Value.Properties1[i].dataString.Value.U1 + " " + QuoteThis(Type2.Value.Properties1[i].dataString.Value.Value);
+                        }
+
+                        if (Type2.Value.Properties1[i].Type == 4)
+                        {
+                            string textValue = "false";
+
+                            if (Type2.Value.Properties1[i].dataBool.Value.Value)
+                            {
+                                textValue = "true";
+                            }
+
+                            TextFile += Type2.Value.Properties1[i].dataBool.Value.U0 + " " + Type2.Value.Properties1[i].dataBool.Value.U1 + " " + textValue;
+                        }
+
+                        TextFile += n;
+                    }
+                }
+            }
+
+
+            var Temp = File.CreateText(path);
+            Temp.Write(TextFile);
+            Temp.Close();
+        }
+
+        public static C3POHandlerVersion3 LoadText(string path)
+        {
+            int LinePos = 0;
+            bool TypeTab = false;
+
+
+            C3POHandlerVersion3 handler = new C3POHandlerVersion3();
+
+            while(true)
+            {
+
+
+            }
+
+            return handler;
+        }
+
+        public string QuoteThis(string text)
+        {
+            return "\""+text+"\"";
         }
 
         public struct Type1Struct

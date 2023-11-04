@@ -28,7 +28,7 @@ namespace C3PO_Converter
             {
                 SaveFileDialog openFileDialog1 = new SaveFileDialog
                 {
-                    Filter = "JSON File (*.json)|*.json|All files (*.*)|*.*",
+                    Filter = "Text File (*.txt)|*.json|All files (*.*)|*.*",
                     FilterIndex = 1,
                     RestoreDirectory = false
 
@@ -53,7 +53,8 @@ namespace C3PO_Converter
                     {
                         C3POHandlerVersion3 c3PO_Handler = new C3POHandlerVersion3();
                         c3PO_Handler.Load(openFileDialog.FileName);
-                        c3PO_Handler.CreateJson(openFileDialog1.FileName, true);
+                        c3PO_Handler.CreateText(openFileDialog1.FileName);
+                        //c3PO_Handler.CreateJson(openFileDialog1.FileName, true);
                     }
                     else
                     {
@@ -100,7 +101,8 @@ namespace C3PO_Converter
                         {
                             C3POHandlerVersion3 c3POHandlerVersion4 = new C3POHandlerVersion3();
                             c3POHandlerVersion4.Load(NewFiles[i]);
-                            c3POHandlerVersion4.CreateJson(openFileDialog2.FileName + "\\" + Path.GetFileNameWithoutExtension(NewFiles[i]) + ".json", true);
+                            c3POHandlerVersion4.CreateText(openFileDialog2.FileName + "\\" + Path.GetFileNameWithoutExtension(NewFiles[i]) + ".txt");
+                            //c3POHandlerVersion4.CreateJson(openFileDialog2.FileName + "\\" + Path.GetFileNameWithoutExtension(NewFiles[i]) + ".json", true);
                         }
                         else
                         {
