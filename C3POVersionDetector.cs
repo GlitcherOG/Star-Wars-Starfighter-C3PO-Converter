@@ -41,6 +41,13 @@ namespace C3PO_Converter
             string Out = "";
             IList<string> messages = new List<string>();
             bool valid = true;
+            if (VersionID == 2)
+            {
+                JSchemaGenerator generator = new JSchemaGenerator();
+                JSchema schema = generator.Generate(typeof(C3POHandlerVersion2));
+                JObject file = JObject.Parse(json);
+                valid = file.IsValid(schema, out messages);
+            }
             if (VersionID == 3)
             {
                 JSchemaGenerator generator = new JSchemaGenerator();

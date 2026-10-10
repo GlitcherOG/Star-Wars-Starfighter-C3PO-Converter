@@ -56,6 +56,13 @@ namespace C3PO_Converter
                         //c3PO_Handler.CreateText(openFileDialog1.FileName);
                         c3PO_Handler.CreateJson(openFileDialog1.FileName, true);
                     }
+                    else if (Version == 2)
+                    {
+                        C3POHandlerVersion2 c3PO_Handler = new C3POHandlerVersion2();
+                        c3PO_Handler.Load(openFileDialog.FileName);
+                        //c3PO_Handler.CreateText(openFileDialog1.FileName);
+                        c3PO_Handler.CreateJson(openFileDialog1.FileName, true);
+                    }
                     else
                     {
                         MessageBox.Show("Error Unknown Type Detected " + Version);
@@ -100,6 +107,13 @@ namespace C3PO_Converter
                         else if (Version == 3)
                         {
                             C3POHandlerVersion3 c3POHandlerVersion4 = new C3POHandlerVersion3();
+                            c3POHandlerVersion4.Load(NewFiles[i]);
+                            //c3POHandlerVersion4.CreateText(openFileDialog2.FileName + "\\" + Path.GetFileNameWithoutExtension(NewFiles[i]) + ".txt");
+                            c3POHandlerVersion4.CreateJson(openFileDialog2.FileName + "\\" + Path.GetFileNameWithoutExtension(NewFiles[i]) + ".json", true);
+                        }
+                        else if (Version == 2)
+                        {
+                            C3POHandlerVersion2 c3POHandlerVersion4 = new C3POHandlerVersion2();
                             c3POHandlerVersion4.Load(NewFiles[i]);
                             //c3POHandlerVersion4.CreateText(openFileDialog2.FileName + "\\" + Path.GetFileNameWithoutExtension(NewFiles[i]) + ".txt");
                             c3POHandlerVersion4.CreateJson(openFileDialog2.FileName + "\\" + Path.GetFileNameWithoutExtension(NewFiles[i]) + ".json", true);
