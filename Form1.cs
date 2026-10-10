@@ -28,7 +28,7 @@ namespace C3PO_Converter
             {
                 SaveFileDialog openFileDialog1 = new SaveFileDialog
                 {
-                    Filter = "Text File (*.txt)|*.json|All files (*.*)|*.*",
+                    Filter = "json File (*.json)|*.json|All files (*.*)|*.*",
                     FilterIndex = 1,
                     RestoreDirectory = false
 
@@ -53,8 +53,8 @@ namespace C3PO_Converter
                     {
                         C3POHandlerVersion3 c3PO_Handler = new C3POHandlerVersion3();
                         c3PO_Handler.Load(openFileDialog.FileName);
-                        c3PO_Handler.CreateText(openFileDialog1.FileName);
-                        //c3PO_Handler.CreateJson(openFileDialog1.FileName, true);
+                        //c3PO_Handler.CreateText(openFileDialog1.FileName);
+                        c3PO_Handler.CreateJson(openFileDialog1.FileName, true);
                     }
                     else
                     {
@@ -101,8 +101,8 @@ namespace C3PO_Converter
                         {
                             C3POHandlerVersion3 c3POHandlerVersion4 = new C3POHandlerVersion3();
                             c3POHandlerVersion4.Load(NewFiles[i]);
-                            c3POHandlerVersion4.CreateText(openFileDialog2.FileName + "\\" + Path.GetFileNameWithoutExtension(NewFiles[i]) + ".txt");
-                            //c3POHandlerVersion4.CreateJson(openFileDialog2.FileName + "\\" + Path.GetFileNameWithoutExtension(NewFiles[i]) + ".json", true);
+                            //c3POHandlerVersion4.CreateText(openFileDialog2.FileName + "\\" + Path.GetFileNameWithoutExtension(NewFiles[i]) + ".txt");
+                            c3POHandlerVersion4.CreateJson(openFileDialog2.FileName + "\\" + Path.GetFileNameWithoutExtension(NewFiles[i]) + ".json", true);
                         }
                         else
                         {
@@ -120,7 +120,7 @@ namespace C3PO_Converter
         {
             OpenFileDialog openFileDialog = new OpenFileDialog
             {
-                Filter = "JSON File (*.json)|*.json|All files (*.*)|*.*",
+                Filter = "json File (*.json)|*.json|All files (*.*)|*.*",
                 FilterIndex = 1,
                 RestoreDirectory = false
             };
@@ -135,9 +135,9 @@ namespace C3PO_Converter
                 openFileDialog1.FileName = Path.GetFileNameWithoutExtension(openFileDialog.FileName);
                 if (openFileDialog1.ShowDialog() == DialogResult.OK)
                 {
-                    int Version = C3POVersionDetector.ReadJsonVersionID(openFileDialog.FileName);
-                    string Warning = C3POVersionDetector.VerifyJSON(openFileDialog.FileName, Version);
-                    if (Warning != "")
+                    int Version = 3;//C3POVersionDetector.ReadJsonVersionID(openFileDialog.FileName);
+                    //string Warning = C3POVersionDetector.VerifyJSON(openFileDialog.FileName, Version);
+                    //if (Warning != "")
                     {
                         if (Version == 5)
                         {
@@ -154,6 +154,7 @@ namespace C3PO_Converter
                         else if (Version == 3)
                         {
                             C3POHandlerVersion3 c3PO_Handler = new C3POHandlerVersion3();
+                            //c3PO_Handler = C3POHandlerVersion3.LoadText(openFileDialog.FileName);
                             c3PO_Handler = C3POHandlerVersion3.LoadJSON(openFileDialog.FileName);
                             c3PO_Handler.Save(openFileDialog1.FileName);
                         }
@@ -162,10 +163,10 @@ namespace C3PO_Converter
                             MessageBox.Show("Error Unknown Type Detected " + Version);
                         }
                     }
-                    else
-                    {
-                        MessageBox.Show(Warning);
-                    }
+                    //else
+                    //{
+                    //    MessageBox.Show(Warning);
+                    //}
                 }
             }
         }

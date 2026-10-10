@@ -32,12 +32,13 @@
             button2 = new Button();
             button3 = new Button();
             button4 = new Button();
+            checkBox1 = new CheckBox();
             SuspendLayout();
             // 
             // button1
             // 
-            button1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
-            button1.Location = new Point(12, 12);
+            button1.Anchor = AnchorStyles.None;
+            button1.Location = new Point(10, 12);
             button1.Name = "button1";
             button1.Size = new Size(172, 34);
             button1.TabIndex = 0;
@@ -47,8 +48,8 @@
             // 
             // button2
             // 
-            button2.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
-            button2.Location = new Point(12, 52);
+            button2.Anchor = AnchorStyles.None;
+            button2.Location = new Point(10, 52);
             button2.Name = "button2";
             button2.Size = new Size(172, 34);
             button2.TabIndex = 1;
@@ -58,8 +59,8 @@
             // 
             // button3
             // 
-            button3.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
-            button3.Location = new Point(190, 52);
+            button3.Anchor = AnchorStyles.None;
+            button3.Location = new Point(188, 52);
             button3.Name = "button3";
             button3.Size = new Size(191, 34);
             button3.TabIndex = 2;
@@ -69,8 +70,8 @@
             // 
             // button4
             // 
-            button4.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
-            button4.Location = new Point(190, 12);
+            button4.Anchor = AnchorStyles.None;
+            button4.Location = new Point(188, 12);
             button4.Name = "button4";
             button4.Size = new Size(191, 34);
             button4.TabIndex = 3;
@@ -78,11 +79,23 @@
             button4.UseVisualStyleBackColor = true;
             button4.Click += button4_Click;
             // 
+            // checkBox1
+            // 
+            checkBox1.AutoSize = true;
+            checkBox1.Location = new Point(12, 92);
+            checkBox1.Name = "checkBox1";
+            checkBox1.Size = new Size(114, 19);
+            checkBox1.TabIndex = 4;
+            checkBox1.Text = "JSON Decompile";
+            checkBox1.UseVisualStyleBackColor = true;
+            checkBox1.Visible = false;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(391, 94);
+            ClientSize = new Size(391, 118);
+            Controls.Add(checkBox1);
             Controls.Add(button4);
             Controls.Add(button3);
             Controls.Add(button2);
@@ -93,6 +106,7 @@
             Text = "C3PO Decompiler by GlitcherOG";
             Load += Form1_Load;
             ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
@@ -101,5 +115,6 @@
         private Button button2;
         private Button button3;
         private Button button4;
+        private CheckBox checkBox1;
     }
 }

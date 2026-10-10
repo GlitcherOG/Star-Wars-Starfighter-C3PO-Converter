@@ -206,74 +206,103 @@ namespace C3PO_Converter
             {
                 var TempVar = VariblesType0.Value;
 
-                StreamUtil.WriteNullString(stream, TempVar.ModelFile);
-                StreamUtil.WriteUInt8(stream, TempVar.WeaponGroups.Count);
-                for (int i = 0; i < TempVar.WeaponGroups.Count; i++)
+                if (TempVar.WeaponGroups != null)
                 {
-                    StreamUtil.WriteNullString(stream, TempVar.WeaponGroups[i].GroupName);
-                    StreamUtil.WriteUInt8(stream, TempVar.WeaponGroups[i].Weapons.Count);
-                    for (int a = 0; a < TempVar.WeaponGroups[i].Weapons.Count; a++)
+                    StreamUtil.WriteNullString(stream, TempVar.ModelFile);
+                    StreamUtil.WriteUInt8(stream, TempVar.WeaponGroups.Count);
+                    for (int i = 0; i < TempVar.WeaponGroups.Count; i++)
                     {
-                        StreamUtil.WriteNullString(stream, TempVar.WeaponGroups[i].Weapons[a].WeaponName);
-                        StreamUtil.WriteNullString(stream, TempVar.WeaponGroups[i].Weapons[a].WeaponClass);
-                        StreamUtil.WriteNullString(stream, TempVar.WeaponGroups[i].Weapons[a].WeaponType);
-                    }
-                }
-
-                StreamUtil.WriteUInt8(stream, TempVar.FDatas.Count);
-                for (int i = 0; i < TempVar.FDatas.Count; i++)
-                {
-                    StreamUtil.WriteNullString(stream, TempVar.FDatas[i].FDataName);
-                    StreamUtil.WriteUInt8(stream, TempVar.FDatas[i].FDataStates.Count);
-                    for (int a = 0; a < TempVar.FDatas[i].FDataStates.Count; a++)
-                    {
-                        StreamUtil.WriteNullString(stream, TempVar.FDatas[i].FDataStates[a].StateName);
-                        StreamUtil.WriteNullString(stream, TempVar.FDatas[i].FDataStates[a].StateClass);
-                    }
-
-                    StreamUtil.WriteUInt8(stream, TempVar.FDatas[i].U1);
-                    StreamUtil.WriteNullString(stream, TempVar.FDatas[i].U2);
-                    StreamUtil.WriteUInt8(stream, TempVar.FDatas[i].U3);
-                    StreamUtil.WriteNullString(stream, TempVar.FDatas[i].U4);
-                    StreamUtil.WriteNullString(stream, TempVar.FDatas[i].U5);
-                    StreamUtil.WriteUInt8(stream, TempVar.FDatas[i].U6);
-                    StreamUtil.WriteNullString(stream, TempVar.FDatas[i].FDataFile);
-                }
-
-                StreamUtil.WriteUInt8(stream, TempVar.SubObjects.Count);
-                for (int i = 0; i < TempVar.SubObjects.Count; i++)
-                {
-                    StreamUtil.WriteNullString(stream, TempVar.SubObjects[i].ObjectName);
-                    StreamUtil.WriteNullString(stream, TempVar.SubObjects[i].ObjectClass);
-                    StreamUtil.WriteUInt8(stream, TempVar.SubObjects[i].U3);
-
-                    SaveFloats(TempVar.SubObjects[i].Position, stream);
-                    SaveFloats(TempVar.SubObjects[i].Orentation, stream);
-                }
-
-                StreamUtil.WriteUInt8(stream, TempVar.SubObjectProperties.Count);
-                for (int i = 0; i < TempVar.SubObjectProperties.Count; i++)
-                {
-                    StreamUtil.WriteNullString(stream, TempVar.SubObjectProperties[i].SubObjectName);
-                    StreamUtil.WriteUInt8(stream, TempVar.SubObjectProperties[i].Properties.Count);
-
-                    for (int a = 0; a < TempVar.SubObjectProperties[i].Properties.Count; a++)
-                    {
-                        StreamUtil.WriteNullString(stream, TempVar.SubObjectProperties[i].Properties[a].PropertyName);
-                        StreamUtil.WriteUInt8(stream, TempVar.SubObjectProperties[i].Properties[a].ValueType);
-                        if(TempVar.SubObjectProperties[i].Properties[a].ValueType==1)
+                        StreamUtil.WriteNullString(stream, TempVar.WeaponGroups[i].GroupName);
+                        StreamUtil.WriteUInt8(stream, TempVar.WeaponGroups[i].Weapons.Count);
+                        for (int a = 0; a < TempVar.WeaponGroups[i].Weapons.Count; a++)
                         {
-                            StreamUtil.WriteNullString(stream, TempVar.SubObjectProperties[i].Properties[a].StringValue);
-                        }
-                        else if (TempVar.SubObjectProperties[i].Properties[a].ValueType == 8)
-                        {
-                            StreamUtil.WriteInt32(stream, TempVar.SubObjectProperties[i].Properties[a].IntValue.Value);
-                        }
-                        else if (TempVar.SubObjectProperties[i].Properties[a].ValueType == 10)
-                        {
-                            StreamUtil.WriteFloat32(stream, TempVar.SubObjectProperties[i].Properties[a].FloatValue.Value);
+                            StreamUtil.WriteNullString(stream, TempVar.WeaponGroups[i].Weapons[a].WeaponName);
+                            StreamUtil.WriteNullString(stream, TempVar.WeaponGroups[i].Weapons[a].WeaponClass);
+                            StreamUtil.WriteNullString(stream, TempVar.WeaponGroups[i].Weapons[a].WeaponType);
                         }
                     }
+                }
+                else
+                {
+                    StreamUtil.WriteNullString(stream, "");
+                    StreamUtil.WriteUInt8(stream, 0);
+                }
+
+                if (TempVar.FDatas != null)
+                {
+                    StreamUtil.WriteUInt8(stream, TempVar.FDatas.Count);
+                    for (int i = 0; i < TempVar.FDatas.Count; i++)
+                    {
+                        StreamUtil.WriteNullString(stream, TempVar.FDatas[i].FDataName);
+                        StreamUtil.WriteUInt8(stream, TempVar.FDatas[i].FDataStates.Count);
+                        for (int a = 0; a < TempVar.FDatas[i].FDataStates.Count; a++)
+                        {
+                            StreamUtil.WriteNullString(stream, TempVar.FDatas[i].FDataStates[a].StateName);
+                            StreamUtil.WriteNullString(stream, TempVar.FDatas[i].FDataStates[a].StateClass);
+                        }
+
+                        StreamUtil.WriteUInt8(stream, TempVar.FDatas[i].U1);
+                        StreamUtil.WriteNullString(stream, TempVar.FDatas[i].U2);
+                        StreamUtil.WriteUInt8(stream, TempVar.FDatas[i].U3);
+                        StreamUtil.WriteNullString(stream, TempVar.FDatas[i].U4);
+                        StreamUtil.WriteNullString(stream, TempVar.FDatas[i].U5);
+                        StreamUtil.WriteUInt8(stream, TempVar.FDatas[i].U6);
+                        StreamUtil.WriteNullString(stream, TempVar.FDatas[i].FDataFile);
+                    }
+                }
+                else
+                {
+                    StreamUtil.WriteUInt8(stream, 0);
+                }
+
+                if (TempVar.SubObjects != null)
+                {
+                    StreamUtil.WriteUInt8(stream, TempVar.SubObjects.Count);
+                    for (int i = 0; i < TempVar.SubObjects.Count; i++)
+                    {
+                        StreamUtil.WriteNullString(stream, TempVar.SubObjects[i].ObjectName);
+                        StreamUtil.WriteNullString(stream, TempVar.SubObjects[i].ObjectClass);
+                        StreamUtil.WriteUInt8(stream, TempVar.SubObjects[i].U3);
+
+                        SaveFloats(TempVar.SubObjects[i].Position, stream);
+                        SaveFloats(TempVar.SubObjects[i].Orentation, stream);
+                    }
+                }
+                else
+                {
+                    StreamUtil.WriteUInt8(stream, 0);
+                }
+
+                if (TempVar.SubObjectProperties != null)
+                {
+                    StreamUtil.WriteUInt8(stream, TempVar.SubObjectProperties.Count);
+                    for (int i = 0; i < TempVar.SubObjectProperties.Count; i++)
+                    {
+                        StreamUtil.WriteNullString(stream, TempVar.SubObjectProperties[i].SubObjectName);
+                        StreamUtil.WriteUInt8(stream, TempVar.SubObjectProperties[i].Properties.Count);
+
+                        for (int a = 0; a < TempVar.SubObjectProperties[i].Properties.Count; a++)
+                        {
+                            StreamUtil.WriteNullString(stream, TempVar.SubObjectProperties[i].Properties[a].PropertyName);
+                            StreamUtil.WriteUInt8(stream, TempVar.SubObjectProperties[i].Properties[a].ValueType);
+                            if (TempVar.SubObjectProperties[i].Properties[a].ValueType == 1)
+                            {
+                                StreamUtil.WriteNullString(stream, TempVar.SubObjectProperties[i].Properties[a].StringValue);
+                            }
+                            else if (TempVar.SubObjectProperties[i].Properties[a].ValueType == 8)
+                            {
+                                StreamUtil.WriteInt32(stream, TempVar.SubObjectProperties[i].Properties[a].IntValue.Value);
+                            }
+                            else if (TempVar.SubObjectProperties[i].Properties[a].ValueType == 10)
+                            {
+                                StreamUtil.WriteFloat32(stream, TempVar.SubObjectProperties[i].Properties[a].FloatValue.Value);
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    StreamUtil.WriteUInt8(stream, 0);
                 }
 
             }
