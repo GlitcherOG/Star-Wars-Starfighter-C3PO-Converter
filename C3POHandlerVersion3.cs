@@ -1,19 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Diagnostics;
 using Newtonsoft.Json;
-using static C3PO_Converter.C3POHandlerVersion4;
 
 namespace C3PO_Converter
 {
     public class C3POHandlerVersion3
     {
         public string MagicHeader = "LucasArts Class File";
-        public int MagicByte =26;
-        public int VersionID;
+        public int MagicByte = 26;
+        public int VersionID = 3;
         public int StructureType;
 
         public Type1Struct? Type1;
@@ -444,16 +438,302 @@ namespace C3PO_Converter
 
         public static C3POHandlerVersion3 LoadText(string path)
         {
-            int LinePos = 0;
-            bool TypeTab = false;
-
-
             C3POHandlerVersion3 handler = new C3POHandlerVersion3();
 
-            while(true)
+            string[] Lines = File.ReadAllLines(path);
+
+            //Read all lines testing names
+            //if properties or weapon properties
+
+            for (int i = 0; i < Lines.Length; i++)
             {
+                string[] Split = Lines[i].Split('"')
+                     .Select((element, index) => index % 2 == 0  // If even index
+                                           ? element.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries)  // Split the item
+                                           : new string[] { element })  // Keep the entire item
+                     .SelectMany(element => element).ToArray();
 
+                if (Split.Length != 0)
+                {
+                    if (Split[0].ToLower() == "version")
+                    {
+                        if (Split[1] != "3")
+                        {
+                            return null;
+                        }
+                    }
 
+                    if (Split[0].ToLower() == "type")
+                    {
+                        handler.StructureType = int.Parse(Split[1]);
+                        if(handler.StructureType==1)
+                        {
+                            var TempType = new Type1Struct();
+
+                            TempType.Properties = new List<Data>();
+                            TempType.WeaponGroups = new List<WeaponGroupsStruct>();
+
+                            handler.Type1 = TempType;
+                        }
+                        if (handler.StructureType == 2)
+                        {
+                            handler.Type2 = new Type2Struct();
+                        }
+                    }
+
+                    if(handler.StructureType==1)
+                    {
+                        var TempType = handler.Type1.Value;
+                        if (Split[0].ToLower() == "itemname")
+                        {
+                            TempType.ItemName = Split[1];
+                        }
+                        if (Split[0].ToLower() == "itemclass")
+                        {
+                            TempType.ItemClass = Split[1];
+                        }
+                        if (Split[0].ToLower() == "itemmodel")
+                        {
+                            TempType.ItemModel = Split[1];
+                        }
+                        if (Split[0].ToLower() == "u1")
+                        {
+                            TempType.U1 = int.Parse(Split[1]);
+                        }
+                        if (Split[0].ToLower() == "u2")
+                        {
+                            TempType.U2 = Split[1];
+                        }
+
+                        if (Split[0].ToLower() == "properties")
+                        {
+                            while(i < Lines.Length)
+                            {
+                                i++;
+                                if (Split.Length==0)
+                                {
+                                    break;
+                                }
+                                if (!Split[0].Contains("\t"))
+                                {
+                                    break;
+                                }
+
+                                Data data = new Data();
+                                Split[0] = Split[0].TrimStart('\t');
+
+                                if (Lines[i].Contains("\""))
+                                {
+                                    //String
+                                    data.Type = 3;
+
+                                    var TempData = new DataString();
+                                    TempData.U0 = int.Parse(Split[1]);
+                                    TempData.U1 = int.Parse(Split[2]);
+                                    TempData.Value = Lines[3];
+
+                                    data.dataString = TempData;
+                                }
+                                else if (Split[3].Contains("f"))
+                                {
+                                    //Float
+                                    data.Type = 2;
+
+                                    var TempData = new DataFloat();
+                                    TempData.U0 = int.Parse(Split[1]);
+                                    TempData.U1 = int.Parse(Split[2]);
+                                    TempData.Value = float.Parse(Lines[3]);
+
+                                    data.dataFloat = TempData;
+                                }
+                                else if (Split[3].Contains("true") || Split[3].Contains("false"))
+                                {
+                                    //Bool
+                                    data.Type = 4;
+
+                                    var TempData = new DataBool();
+                                    TempData.U0 = int.Parse(Split[1]);
+                                    TempData.U1 = int.Parse(Split[2]);
+                                    TempData.Value = bool.Parse(Lines[3]);
+
+                                    data.dataBool = TempData;
+                                }
+                                else
+                                {
+                                    //int
+                                    data.Type = 1;
+
+                                    var TempData = new DataInt();
+                                    TempData.U0 = int.Parse(Split[1]);
+                                    TempData.U1 = int.Parse(Split[2]);
+                                    TempData.Value = int.Parse(Lines[3]);
+
+                                    data.dataInt = TempData;
+                                }
+
+                                TempType.Properties.Add(data);
+                            }
+                        }
+
+                        handler.Type1 = TempType;
+                    }
+
+                    if (handler.StructureType == 2)
+                    {
+                        var TempType = handler.Type2.Value;
+                        if (Split[0].ToLower() == "itemname")
+                        {
+                            TempType.ItemName = Split[1];
+                        }
+                        if (Split[0].ToLower() == "itemclass")
+                        {
+                            TempType.ItemClass = Split[1];
+                        }
+
+                        if (Split[0].ToLower() == "properties")
+                        {
+                            while (i < Lines.Length)
+                            {
+                                i++;
+                                if (Split.Length == 0)
+                                {
+                                    break;
+                                }
+                                if (!Split[0].Contains("\t"))
+                                {
+                                    break;
+                                }
+
+                                Data data = new Data();
+                                Split[0] = Split[0].TrimStart('\t');
+
+                                if (Lines[i].Contains("\""))
+                                {
+                                    //String
+                                    data.Type = 3;
+
+                                    var TempData = new DataString();
+                                    TempData.U0 = int.Parse(Split[1]);
+                                    TempData.U1 = int.Parse(Split[2]);
+                                    TempData.Value = Lines[3];
+
+                                    data.dataString = TempData;
+                                }
+                                else if (Split[3].Contains("f"))
+                                {
+                                    //Float
+                                    data.Type = 2;
+
+                                    var TempData = new DataFloat();
+                                    TempData.U0 = int.Parse(Split[1]);
+                                    TempData.U1 = int.Parse(Split[2]);
+                                    TempData.Value = float.Parse(Lines[3]);
+
+                                    data.dataFloat = TempData;
+                                }
+                                else if (Split[3].Contains("true") || Split[3].Contains("false"))
+                                {
+                                    //Bool
+                                    data.Type = 4;
+
+                                    var TempData = new DataBool();
+                                    TempData.U0 = int.Parse(Split[1]);
+                                    TempData.U1 = int.Parse(Split[2]);
+                                    TempData.Value = bool.Parse(Lines[3]);
+
+                                    data.dataBool = TempData;
+                                }
+                                else
+                                {
+                                    //int
+                                    data.Type = 1;
+
+                                    var TempData = new DataInt();
+                                    TempData.U0 = int.Parse(Split[1]);
+                                    TempData.U1 = int.Parse(Split[2]);
+                                    TempData.Value = int.Parse(Lines[3]);
+
+                                    data.dataInt = TempData;
+                                }
+
+                                TempType.Properties.Add(data);
+                            }
+                        }
+
+                        if (Split[0].ToLower() == "properties1")
+                        {
+                            while (i < Lines.Length)
+                            {
+                                i++;
+                                if (Split.Length == 0)
+                                {
+                                    break;
+                                }
+                                if (!Split[0].Contains("\t"))
+                                {
+                                    break;
+                                }
+
+                                Data data = new Data();
+                                Split[0] = Split[0].TrimStart('\t');
+
+                                if (Lines[i].Contains("\""))
+                                {
+                                    //String
+                                    data.Type = 3;
+
+                                    var TempData = new DataString();
+                                    TempData.U0 = int.Parse(Split[1]);
+                                    TempData.U1 = int.Parse(Split[2]);
+                                    TempData.Value = Lines[3];
+
+                                    data.dataString = TempData;
+                                }
+                                else if (Split[3].Contains("f"))
+                                {
+                                    //Float
+                                    data.Type = 2;
+
+                                    var TempData = new DataFloat();
+                                    TempData.U0 = int.Parse(Split[1]);
+                                    TempData.U1 = int.Parse(Split[2]);
+                                    TempData.Value = float.Parse(Lines[3]);
+
+                                    data.dataFloat = TempData;
+                                }
+                                else if (Split[3].Contains("true") || Split[3].Contains("false"))
+                                {
+                                    //Bool
+                                    data.Type = 4;
+
+                                    var TempData = new DataBool();
+                                    TempData.U0 = int.Parse(Split[1]);
+                                    TempData.U1 = int.Parse(Split[2]);
+                                    TempData.Value = bool.Parse(Lines[3]);
+
+                                    data.dataBool = TempData;
+                                }
+                                else
+                                {
+                                    //int
+                                    data.Type = 1;
+
+                                    var TempData = new DataInt();
+                                    TempData.U0 = int.Parse(Split[1]);
+                                    TempData.U1 = int.Parse(Split[2]);
+                                    TempData.Value = int.Parse(Lines[3]);
+
+                                    data.dataInt = TempData;
+                                }
+
+                                TempType.Properties1.Add(data);
+                            }
+                        }
+
+                        handler.Type2 = TempType;
+                    }
+
+                }
             }
 
             return handler;
